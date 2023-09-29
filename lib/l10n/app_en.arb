@@ -1,0 +1,12 @@
+{
+  "app_title": "TO DO LIST",
+  "mood": "MOOD",
+  "language": "LANGUAGE",
+  "english": "ENGLISH",
+  "arabic": "ARABIC",
+  "add_task": "ADD NEW TASK",
+  "tile": "Please Enter Your Task Title",
+  "description": "Please Enter Your Task Description",
+  "selected_time": "Selected Time",
+  "save": "SAVE CHANGES"
+}
