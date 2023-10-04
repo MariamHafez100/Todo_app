@@ -6,6 +6,7 @@ import 'package:todo/firebase_details.dart';
 import 'package:todo/providers/providerapp.dart';
 
 import '../../myTheme.dart';
+import '../../providers/auth_provider.dart';
 
 class EditList extends StatefulWidget {
   static String routeName = 'edit List';
@@ -25,6 +26,7 @@ class _EditListState extends State<EditList> {
   @override
   Widget build(BuildContext context) {
     Tasks oldTask = ModalRoute.of(context)?.settings.arguments as Tasks;
+    var authprovider = Provider.of<AuthProvider>(context);
 
     var provider = Provider.of<appProvider>(context);
     return Scaffold(
@@ -138,7 +140,8 @@ class _EditListState extends State<EditList> {
                                 //print("Task ID: ${oldTask.id}");
                                 if (oldTask.id != null &&
                                     oldTask.id!.isNotEmpty) {
-                                  var taskCollection = FireBase.getCollection();
+                                  var taskCollection = FireBase.getCollection(
+                                      authprovider.currentUser!.id!);
                                   var docRef = taskCollection.doc(oldTask.id);
 
                                   docRef.update({
@@ -148,7 +151,8 @@ class _EditListState extends State<EditList> {
                                     // Update the 'description' field
                                   }).timeout(Duration(milliseconds: 500),
                                       onTimeout: () {
-                                    provider.getTasksDataFromFire();
+                                    provider.getTasksDataFromFire(
+                                        authprovider.currentUser!.id!);
                                     print('Task is EDITED');
                                     Navigator.pop(context);
                                   });

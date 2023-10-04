@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:todo/authurization/login.dart';
 import 'package:todo/homee/editbottomsheet.dart';
 import 'package:todo/homee/settings/settingscreen.dart';
 
+import '../providers/auth_provider.dart';
+import '../providers/providerapp.dart';
 import 'list/listscreen.dart';
 
 class homescreen extends StatefulWidget {
@@ -17,16 +21,28 @@ class _homescreenState extends State<homescreen> {
 
   @override
   Widget build(BuildContext context) {
+    var authprovider = Provider.of<AuthProvider>(context, listen: false);
+    var provider = Provider.of<appProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         //toolbarHeight: MediaQuery.of(context).size.height*0.17,
         title: Text(
-          AppLocalizations.of(context)!.app_title,
+          '${AppLocalizations.of(context)!.app_title} ${authprovider.currentUser!.name}',
           style: Theme.of(context)
               .textTheme
               .titleLarge
               ?.copyWith(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                provider.tasksList = [];
+                authprovider.currentUser = null;
+                Navigator.pushReplacementNamed(context, Login.routeName);
+              },
+              icon: Icon(Icons.logout_outlined))
+        ],
       ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),

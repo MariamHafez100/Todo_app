@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/alert_dialog.dart';
 import 'package:todo/dataClass/dataClass.dart';
 import 'package:todo/firebase_details.dart';
 import 'package:todo/myTheme.dart';
 import 'package:todo/providers/providerapp.dart';
+
+import '../providers/auth_provider.dart';
 
 class AddBottomSheet extends StatefulWidget {
   @override
@@ -111,14 +114,6 @@ class _AddBottomSheetState extends State<AddBottomSheet> {
                       shape: CircleBorder(),
                       onPressed: () {
                         addTask();
-                        Fluttertoast.showToast(
-                            msg: "YOU ADDED A NEW TASK SUCCESSFULLY",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 10,
-                            backgroundColor: MyTheme.primaryLight,
-                            textColor: Colors.white,
-                            fontSize: 18.0);
                       },
                       child: Icon(Icons.check),
                     )
@@ -148,9 +143,22 @@ class _AddBottomSheetState extends State<AddBottomSheet> {
     if (formKey.currentState?.validate() == true) {
       Tasks task = Tasks(title: title, decription: dec, dateTime: chosen);
       // lw .then yb2a sh8len ll online w esm3e el 7eta de tane
-      FireBase.AddTodoTask(task).timeout(Duration(milliseconds: 500),
-          onTimeout: () {
-        provider.getTasksDataFromFire();
+      AlertDetails.showLoading(context, 'Loading...');
+      var authprovider = Provider.of<AuthProvider>(context, listen: false);
+
+      FireBase.AddTodoTask(task, authprovider.currentUser!.id!).then((value) {
+        AlertDetails.hideLoading(context);
+        Fluttertoast.showToast(
+            msg: "YOU ADDED A NEW TASK SUCCESSFULLY",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 10,
+            backgroundColor: MyTheme.primaryLight,
+            textColor: Colors.white,
+            fontSize: 18.0);
+        Navigator.pop(context);
+      }).timeout(Duration(milliseconds: 500), onTimeout: () {
+        provider.getTasksDataFromFire(authprovider.currentUser!.id!);
         print('Task added successfully');
         Navigator.pop(context);
       });
