@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_timeline_calendar/timeline/model/calendar_options.dart';
-import 'package:flutter_timeline_calendar/timeline/model/day_options.dart';
-import 'package:flutter_timeline_calendar/timeline/model/headers_options.dart';
-import 'package:flutter_timeline_calendar/timeline/utils/calendar_types.dart';
-import 'package:flutter_timeline_calendar/timeline/widget/timeline_calendar.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
+    show CalendarCarousel;
 import 'package:provider/provider.dart';
 import 'package:todo/homee/list/tasklist.dart';
 import 'package:todo/myTheme.dart';
 import 'package:todo/providers/providerapp.dart';
+
+import '../../providers/auth_provider.dart';
 
 class listTap extends StatefulWidget {
   @override
@@ -17,45 +17,79 @@ class listTap extends StatefulWidget {
 class _listTapState extends State<listTap> {
   @override
   Widget build(BuildContext context) {
+    var authprovider = Provider.of<AuthProvider>(context);
     var provider = Provider.of<appProvider>(context);
     if (provider.tasksList.isEmpty) {
-      provider.getTasksDataFromFire();
-    }
-    //var provider = Provider.of<appProvider>(context);
-
+      provider.getTasksDataFromFire(authprovider.currentUser!.id!);
+    } //var provider = Provider.of<appProvider>(context);
     return Column(
       children: [
-        TimelineCalendar(
-          calendarType: CalendarType.GREGORIAN,
-          //onInit: () => provider.selectTime,
-          calendarLanguage: "en",
-          calendarOptions: CalendarOptions(
-            viewType: ViewType.DAILY,
-            toggleViewType: true,
-            headerMonthElevation: 10,
-            headerMonthShadowColor: Colors.black26,
-            headerMonthBackColor: Colors.transparent,
-          ),
-          dayOptions: DayOptions(
-              //weekDayUnselectedColor: CupertinoColors.destructiveRed,
-              dayFontSize: 18,
-              //todayBackgroundColor: MyTheme.myred,
-              weekDayUnselectedColor: Colors.black,
-              disabledTextColor: MyTheme.darkgray,
-              //unselectedTextColor: MyTheme.grey,
-              compactMode: true,
-              weekDaySelectedColor: MyTheme.primaryLight,
-              disableDaysBeforeNow: true),
-          headerOptions: HeaderOptions(
-              weekDayStringType: WeekDayStringTypes.SHORT,
-              monthStringType: MonthStringTypes.FULL,
-              backgroundColor: MyTheme.primaryLight,
-              headerTextColor: Colors.black),
+        Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.23,
+              color: MyTheme.primaryLight,
+            ),
+            Container(
+              margin: EdgeInsets.all(8),
+              height: MediaQuery.of(context).size.height * 0.20,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: Colors.white,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16.0),
+              child: CalendarCarousel<Event>(
+                onDayPressed: (DateTime date, List<Event> events) {
+                  provider.changeDate(date, authprovider.currentUser!.id!);
+                  this.setState(() => date);
+                },
+                //dayButtonColor: Colors.black,
+                daysTextStyle: TextStyle(color: Colors.black),
+                headerTitleTouchable: true,
+                headerTextStyle: Theme.of(context).textTheme.titleLarge,
+                //weekDayBackgroundColor: Colors.white,
+                weekdayTextStyle: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+                selectedDayButtonColor: MyTheme.primaryLight,
+                weekendTextStyle: TextStyle(
+                  color: Colors.black,
+                ),
+                thisMonthDayBorderColor: MyTheme.primaryLight,
+//      weekDays: null, /// for pass null when you do not want to render weekDays
+//      headerText: Container( /// Example for rendering custom header
+//        child: Text('Custom Header'),
+//      ),
+                customDayBuilder: (
+                  /// you can provide your own build function to make custom day containers
+                  bool isSelectable,
+                  int index,
+                  bool isSelectedDay,
+                  bool isToday,
+                  bool isPrevMonthDay,
+                  TextStyle textStyle,
+                  bool isNextMonthDay,
+                  bool isThisMonthDay,
+                  DateTime day,
+                ) {
+                  /// If you return null, [CalendarCarousel] will build container for current [day] with default function.
+                  /// This way you can build custom containers for specific days only, leaving rest as default.
 
-          onChangeDateTime: (datetime) {
-            //provider.changeDate(datetime);
-            print(datetime.getDate());
-          },
+                  // Example: every 15th of month, we have a flight, we can place an icon in the container like that:
+                },
+                weekFormat: true,
+                //markedDatesMap: _markedDateMap,
+                height: 160,
+                selectedDateTime: provider.selectTime,
+                daysHaveCircularBorder: true,
+
+                /// null for not rendering any border, true for circular border, false for rectangular border
+              ),
+            ),
+          ],
         ),
         Expanded(
           child: ListView.builder(

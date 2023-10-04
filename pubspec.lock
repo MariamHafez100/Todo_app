@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  calendar_timeline:
+    dependency: "direct main"
+    description:
+      name: calendar_timeline
+      sha256: "7437ce216a7c579f2f9554f385dd77a3d5c9d15a63bc38d4d155b66302c85fba"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   characters:
     dependency: transitive
     description:
@@ -145,6 +153,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  firebase_auth:
+    dependency: "direct main"
+    description:
+      name: firebase_auth
+      sha256: e7b7e2a08888cb8ef073a9b6d4df9039ea0ff07c920d4258fb4886c55fe2dbb6
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.10.0"
+  firebase_auth_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_auth_platform_interface
+      sha256: "4862bd649268e32ebd685a58abe1eb7ef13aef3f668ce9c56a7d283c971ec6ff"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.19.0"
+  firebase_auth_web:
+    dependency: transitive
+    description:
+      name: firebase_auth_web
+      sha256: "090d531cc0dcf1e39edc0d64cffa18ccc5745b1fd1081a13ee1bf42d861ff764"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.8.1"
   firebase_core:
     dependency: "direct main"
     description:
@@ -174,6 +206,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_calendar_carousel:
+    dependency: "direct main"
+    description:
+      name: flutter_calendar_carousel
+      sha256: "8666447f3404d2db45a2523095cab053d4d15c4fd5438d4a893d96ea5637a3aa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.2"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -237,6 +277,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.15.4"
+  http_parser:
+    dependency: transitive
+    description:
+      name: http_parser
+      sha256: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.2"
   image:
     dependency: transitive
     description:
@@ -381,6 +429,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  scrollable_positioned_list:
+    dependency: transitive
+    description:
+      name: scrollable_positioned_list
+      sha256: "1b54d5f1329a1e263269abc9e2543d90806131aa14fe7c6062a8054d57249287"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.8"
   shared_preferences:
     dependency: "direct main"
     description:
